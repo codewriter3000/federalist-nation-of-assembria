@@ -5,7 +5,7 @@ class AddStatusToUser < ActiveRecord::Migration[4.2]
   def self.up
     create_enum :user_status_enum, %w[pending active confirmed suspended deleted]
 
-    add_column :users, :status, :user_status_enum, :null => false, :default => "pending"
+    add_column :users, :status, :user_status_enum, :null => false, :default => "confirmed"
 
     User.where(:visible => false).update_all(:status => "deleted")
     User.where(:visible => true, :active => 0).update_all(:status => "pending")
