@@ -1,0 +1,32 @@
+<% changeset_data = { :id => changeset.id }
+
+   if changeset.bbox_valid?
+     bbox = changeset.bbox.to_unscaled
+     changeset_data[:bbox] = {
+       :minlon => bbox.min_lon,
+       :minlat => bbox.min_lat,
+       :maxlon => bbox.max_lon,
+       :maxlat => bbox.max_lat
+     }
+   end %>
+
+<%= tag.li :id => "changeset_#{changeset.id}", :data => { :changeset => changeset_data }, :class => "list-group-item list-group-item-action" do %>
+  <p class="fs-6 text-truncate text-wrap">
+    <a class="changeset_id link-body-emphasis stretched-link" href="<%= changeset_path(changeset) %>">
+      <span><%= changeset.tags["comment"].to_s.presence || t("browse.no_comment") %></span>
+    </a>
+  </p>
+  <div class="row">
+    <div class="col">
+      <%= changeset_details(changeset) %>
+      &middot;
+      <a class="changeset_id link-body-emphasis" href="<%= changeset_path(changeset) %>">
+        #<%= changeset.id %>
+      </a>
+    </div>
+    <div class="col-auto text-secondary<%= " opacity-50" if changeset.comments.empty? %>">
+      <%= changeset.comments.length %>
+      <span class="icon note grey"></span>
+    </div>
+  </div>
+<% end %>
